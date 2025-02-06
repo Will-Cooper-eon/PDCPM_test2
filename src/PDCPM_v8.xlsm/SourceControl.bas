@@ -365,7 +365,7 @@ Public Sub createMenu()
     Set rootMenu = Application.CommandBars(1).Controls.Add(Type:=msoControlPopup, _
     Before:=10, _
     Temporary:=True)
-    rootMenu.caption = "vbaDeveloper"
+    rootMenu.caption = "Git Import-Export"
 
     Dim exSubMenu As CommandBarPopup
     Dim imSubMenu As CommandBarPopup
@@ -456,8 +456,8 @@ Public Sub deleteMenu()
     Dim cbControl
     On Error Resume Next
     For Each cbControl In CommandBars(1).Controls               'TODO if more menus are added, should use a collection instead of multiple if statements (keep code DRY)
-        If cbControl.caption = "vbaDeveloper" Then
-            Debug.Print "Deleting" & "vbaDeveloper"
+        If cbControl.caption = "Git Import-Export" Then
+            Debug.Print "Deleting" & "Git Import-Export"
             cbControl.Delete
         End If
         If cbControl.caption = "XML Import-Export" Then
