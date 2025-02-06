@@ -17,7 +17,7 @@ Public Sub Workbook_AfterSave(ByVal success As Boolean)
     If success Then
         SourceControl.exportVbaCode ThisWorkbook.VBProject
         SourceControl.exportNamedRanges ThisWorkbook
-        MsgBox "Finished saving workbook: " & ThisWorkbook.name & ". Code is exported."
+        ' MsgBox "Finished saving workbook: " & ThisWorkbook.name & ". Code is exported."
     Else
         MsgBox "Saving workbook: " & ThisWorkbook.name & " was not successful. Code is not exported."
     End If
