@@ -4,27 +4,50 @@ Option Explicit
 '' After they are imported manually, the comments below can be uncommented. This will enable automatic code exports on save
 '' and automatic code imports on open.
 
+'' Clean up our private members
+Public Sub Workbook_BeforeClose(Cancel As Boolean)
+    Debug.Print "project thisWorkbook_BeforeClose()"
+    SourceControl.deleteMenu
+End Sub
 
- Private listener As EventListener
- ' Private customAction As CustomActions
+Public Sub Workbook_AfterSave(ByVal success As Boolean)
+    On Error GoTo App_WorkbookAfterSave_Error
 
-'' Initialize member to listen to excel events
-Private Sub Workbook_Open()
-    Debug.Print "project thisWorkbook_open()"
-     Set listener = New EventListener
-     SourceControl.createMenu
-     ' Set customAction = New MyCustomActions
-     'customAction.afterOpen
+    'Export all the modules for this work book if save was successful
+    If success Then
+        SourceControl.exportVbaCode ThisWorkbook.VBProject
+        SourceControl.exportNamedRanges ThisWorkbook
+        MsgBox "Finished saving workbook: " & ThisWorkbook.name & ". Code is exported."
+    Else
+        MsgBox "Saving workbook: " & ThisWorkbook.name & " was not successful. Code is not exported."
+    End If
+
+    Exit Sub
+App_WorkbookAfterSave_Error:
+    SourceControl.handleError "" & ThisWorkbook.VBProject & ".EventListener afterSave"
 End Sub
 
 
-'' Clean up our private members
-Private Sub Workbook_BeforeClose(Cancel As Boolean)
-    Debug.Print "project thisWorkbook_BeforeClose()"
-    SourceControl.deleteMenu
-'     If Not customAction Is Nothing Then
-'         customAction.beforeClose
-'         Set customAction = Nothing
-'     End If
-     Set listener = Nothing
+'Private Sub App_WorkbookBeforeSave(ByVal wb As Workbook, ByVal SaveAsUI As Boolean, Cancel As Boolean)
+'    If Not Cancel Then
+'        SourceControl.formatProject wb.VBProject
+'    End If
+'End Sub
+
+Public Sub Workbook_Open()
+    On Error GoTo App_WorkbookOpen_Error
+    
+    SourceControl.createMenu
+
+    'Import all the modules for this workbook
+    Dim importNow As Integer
+    importNow = MsgBox("Import the code for " & ThisWorkbook.name & " now?", vbYesNo, "EventListener Workbook open event")
+    If importNow = vbYes Then
+        SourceControl.importVbaCode ThisWorkbook.VBProject
+        SourceControl.importNamedRanges ThisWorkbook
+    End If
+
+    Exit Sub
+App_WorkbookOpen_Error:
+    SourceControl.handleError "" & ThisWorkbook.VBProject & ".EventListener WorkbookOpen"
 End Sub

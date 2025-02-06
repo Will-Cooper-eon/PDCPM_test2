@@ -9,6 +9,7 @@ Sub check_data() 'Optional ByVal DuplicatesFixed As Boolean = False)
 'If no data is present then dont run
 If WorksheetFunction.CountA(Range("B4:B5")) = 0 Then
     MsgBox "No data to check"
+    
 Else
     Dim i As Long
     Dim j As Long

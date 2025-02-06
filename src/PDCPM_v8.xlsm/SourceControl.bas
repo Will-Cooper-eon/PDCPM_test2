@@ -171,11 +171,13 @@ Public Sub importVbaCode(vbaProject As VBProject, Optional includeClassFiles As 
         removeComponent vbaProject, componentName
     Next
     'Then import them
-    'Call importComponents
+'    'Call importComponents
     Debug.Print "Invoking 'importComponents' with Application.Ontime with delay " & IMPORT_DELAY
     ' to prevent duplicate modules, like MyClass1 etc.
-    Application.OnTime Now() + TimeValue(IMPORT_DELAY), "'importComponents'"
-    Debug.Print "almost finished importing code for " & vbaProject.name
+    ' Application.OnTime Now() + TimeValue("00:00:03"), "'importComponents'"
+    Call importComponents
+ '   Set listener = New EventListener
+'    Debug.Print "almost finished importing code for " & vbaProject.name
 End Sub
 
 
@@ -190,6 +192,7 @@ Private Sub checkHowToImport(file As Object, includeClassFiles As Boolean)
 '    End If
     If componentName = "SourceControl" Then
         '"don't remove or import ourself
+        ' file.name = "temp" & Right(fileName, 4)
         Exit Sub
     End If
 
