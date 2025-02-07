@@ -68,11 +68,17 @@ Function CreateModifiedFile() As String
     
     Dim Header_Range As Range
     Set Header_Range = CD_ws.Range(CD_ws.Range("Counter_Party"), CD_ws.Range("Cust_ID"))
-    Header_Range.Copy Destination:=Modified_Data_wb.Sheets("Fix").Range("A1")
     Header_Range.Copy Destination:=Modified_Data_wb.Sheets("Flex").Range("A1")
+    Set Header_Range = CD_ws.Range(CD_ws.Range("Counter_Party"), CD_ws.Range("M1_").Offset(0, -1))
+    Header_Range.Copy Destination:=Modified_Data_wb.Sheets("Fix").Range("A1")
+    Set Header_Range = CD_ws.Range(CD_ws.Range("M1_").Offset(0, 360), CD_ws.Range("Cust_ID"))
+    Header_Range.Copy Destination:=Modified_Data_wb.Sheets("Fix").Range("A1").Offset(0, CD_ws.Range("M1_").Column - CD_ws.Range("Counter_Party").Column)
     
     Call SetUsedColumnsWidthAndHeight(Modified_Data_wb.Sheets("Fix"), 20, 15)
     Call SetUsedColumnsWidthAndHeight(Modified_Data_wb.Sheets("Flex"), 20, 15)
+    
+    Modified_Data_wb.Sheets("Fix").Range("A2:A100000").RowHeight = 14.4 ' 24 pixels
+    Modified_Data_wb.Sheets("Flex").Range("A2:A100000").RowHeight = 14.4 ' 24 pixels
     
     ' Save and leave open for user to double check
     Modified_Data_wb.SaveAs fileName:="" & Application.ThisWorkbook.Path & "\" & ExtractMonthYear(CD_ws.Range("Read_In_Directory")) & " Modified.xls"
